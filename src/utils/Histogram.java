@@ -16,6 +16,8 @@ public class Histogram extends JLabel {
 
     private String string = "Histogram";
 
+    private boolean deleted = false;
+
     public Histogram(int[] pixels) {
         for (int datum : pixels) {
             histogram[datum & 0xff]++;
@@ -32,7 +34,14 @@ public class Histogram extends JLabel {
         }
     }
 
+    public void delete() {
+        deleted = true;
+    }
+
     public void paint(Graphics g) {
+        if (deleted) {
+            return;
+        }
         g.drawLine(START_X, END_Y, START_X + 256, END_Y);
         g.drawLine(START_X, START_Y, START_X, END_Y);
         for (int i = 0; i < 256; i += GAP_X) {

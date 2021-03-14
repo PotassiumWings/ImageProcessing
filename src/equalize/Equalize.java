@@ -1,15 +1,7 @@
 package equalize;
 
-import exceptions.TypeNotSupportedException;
 import transform.Transform;
-import utils.AutoAdjustIcon;
-import utils.GrayImageConstructor;
-import utils.Histogram;
-
-import javax.swing.*;
-import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
 public class Equalize extends Transform {
     private final int imageWidth;

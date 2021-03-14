@@ -2,6 +2,8 @@ import equalize.Equalize;
 import equalize.EqualizeFrame;
 import exceptions.FileChooserNotApproveException;
 import exceptions.TypeNotSupportedException;
+import linear.LinearTransform;
+import linear.LinearTransformFrame;
 import utils.FrameSettings;
 import utils.ImageFileChooser;
 
@@ -16,16 +18,20 @@ import java.io.IOException;
 public class LaunchFrame extends Frame {
     private String imagePath;
     private BufferedImage image;
+
     private Equalize equalize;
+    private LinearTransform linearTransform;
+
     private int imageHeight;
     private int imageWidth;
 
     private ImageFileChooser fileChooser;
     private Button chooseFileButton;
     private Button equalizationButton;
-    private Panel panel;
+    private Button linearTransformButton;
 
     private EqualizeFrame equalizeFrame;
+    private LinearTransformFrame linearTransformFrame;
 
     public LaunchFrame() {
         FrameSettings.setSize(this);
@@ -61,6 +67,7 @@ public class LaunchFrame extends Frame {
             try {
                 chooseFile();
                 equalize = new Equalize(image, imageWidth, imageHeight);
+                linearTransform = new LinearTransform(image, imageWidth, imageHeight);
                 repaint();
             } catch (IOException ioException) {
                 ioException.printStackTrace();
@@ -80,6 +87,18 @@ public class LaunchFrame extends Frame {
                 typeNotSupportedException.print();
             }
         });
+
+        linearTransformButton = new Button("Linear Transform");
+        linearTransformButton.setFont(FrameSettings.getButtonFont());
+        linearTransformButton.addActionListener(e -> {
+            try {
+                linearTransform.calculate();
+                this.linearTransformFrame = new LinearTransformFrame(this, linearTransform);
+                this.setVisible(false);
+            } catch (TypeNotSupportedException typeNotSupportedException) {
+                typeNotSupportedException.print();
+            }
+        });
     }
 
     private void chooseFile() throws IOException, FileChooserNotApproveException {
@@ -90,10 +109,11 @@ public class LaunchFrame extends Frame {
     }
 
     private void setPanel() {
-        panel = new Panel();
+        Panel panel = new Panel();
         this.add(panel, BorderLayout.NORTH);
         panel.add(chooseFileButton);
         panel.add(equalizationButton);
+        panel.add(linearTransformButton);
     }
 
     public void paint(Graphics graphics) {

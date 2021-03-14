@@ -8,7 +8,6 @@ import utils.GrayImageConstructor;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
 
 public abstract class Transform {
@@ -18,6 +17,7 @@ public abstract class Transform {
 
     private final BufferedImage image;
 
+    private int[] rawPixels;
     private int[] transformedPixels;
     private Histogram rawHistogram;
     private Histogram transformedHistogram;
@@ -35,15 +35,22 @@ public abstract class Transform {
     }
 
     public void calculate() throws TypeNotSupportedException {
+        calculateRaw();
+        calculateTransformed();
+    }
+
+    private void calculateRaw() throws TypeNotSupportedException {
         // get gray image and rawPixels
         grayImageConstructor = new GrayImageConstructor(image);
         grayImage = grayImageConstructor.getGrayImage();
-        int[] rawPixels = grayImageConstructor.getRawPixels();
+        rawPixels = grayImageConstructor.getRawPixels();
 
         // get gray image histogram
         rawHistogram = getHistogram(rawPixels);
         rawHistogram.setString("Before transformation");
+    }
 
+    public void calculateTransformed() {
         // get transformed image from gray image and rawPixels
         calcTransformedImage(rawPixels);
 
