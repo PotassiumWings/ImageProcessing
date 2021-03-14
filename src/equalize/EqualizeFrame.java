@@ -1,6 +1,7 @@
 package equalize;
 
 import exceptions.FileChooserNotApproveException;
+import transform.Transform;
 import utils.FrameSettings;
 import utils.ImageFileSaver;
 
@@ -12,7 +13,7 @@ import java.awt.image.BufferedImage;
 
 public class EqualizeFrame extends JFrame {
     private final Frame fatherFrame;
-    private final Equalize equalize;
+    private final Transform equalize;
 
     private static final int BORDER = 40;  // distance between labels and frame border
     private static final int GAP = 10;  // distance between labels
@@ -61,7 +62,7 @@ public class EqualizeFrame extends JFrame {
         saveButton1.setFont(FrameSettings.getButtonFont());
         saveButton1.addActionListener(e -> {
             try {
-                saveFile(equalize.getEqualizedImage());
+                saveFile(equalize.getTransformedImage());
             } catch (FileChooserNotApproveException fileChooserNotApproveException) {
                 fileChooserNotApproveException.print();
             }
@@ -104,9 +105,9 @@ public class EqualizeFrame extends JFrame {
     private void setLabels() {
         JLabel[] labels = new JLabel[4];
         labels[0] = equalize.getGrayImagePanel(this);
-        labels[1] = equalize.getEqualizedImagePanel(this);
-        labels[2] = equalize.getGrayHistogramPanel(this);
-        labels[3] = equalize.getEqualizedHistogramPanel(this);
+        labels[1] = equalize.getTransformedImagePanel(this);
+        labels[2] = equalize.getGrayHistogramPanel();
+        labels[3] = equalize.getTransformedHistogramPanel();
         System.err.println("frame width: " + getWidth() + ", height: " + getHeight());
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 2; j++) {

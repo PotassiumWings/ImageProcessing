@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class GrayImage {
+public class GrayImageConstructor {
     private BufferedImage image;
     private final int imageWidth;
     private final int imageHeight;
@@ -14,7 +14,7 @@ public class GrayImage {
 
     private int[] rawPixels;
 
-    public GrayImage(BufferedImage image) throws TypeNotSupportedException {
+    public GrayImageConstructor(BufferedImage image) throws TypeNotSupportedException {
         this.image = image;
         imageWidth = image.getWidth();
         imageHeight = image.getHeight();

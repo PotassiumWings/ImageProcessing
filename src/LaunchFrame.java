@@ -76,8 +76,6 @@ public class LaunchFrame extends Frame {
                 equalize.calculate();
                 this.equalizeFrame = new EqualizeFrame(this, equalize);
                 this.setVisible(false);
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
             } catch (TypeNotSupportedException typeNotSupportedException) {
                 typeNotSupportedException.print();
             }
