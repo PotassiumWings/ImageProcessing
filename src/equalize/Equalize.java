@@ -2,6 +2,7 @@ package equalize;
 
 import exceptions.TypeNotSupportedException;
 import utils.AutoAdjustIcon;
+import utils.GrayImage;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Equalize {
+    GrayImage grayImageConstructor;
     private BufferedImage grayImage;
     private BufferedImage equalizedImage;
 
@@ -18,7 +20,6 @@ public class Equalize {
     private final int imageHeight;
     private final int imageWidth;
 
-    private int[] rawPixels;
     private int[] equalizedPixels;
     private Histogram rawHistogram;
     private Histogram equalizedHistogram;
@@ -31,7 +32,9 @@ public class Equalize {
 
     public void calculate() throws IOException, TypeNotSupportedException {
         // get gray image and rawPixels
-        grayImage = getGrayImage(image);
+        grayImageConstructor = new GrayImage(image);
+        grayImage = grayImageConstructor.getGrayImage();
+        int[] rawPixels = grayImageConstructor.getRawPixels();
 
         // get gray image histogram
         rawHistogram = getHistogram(rawPixels);
@@ -71,52 +74,6 @@ public class Equalize {
 
     public JLabel getEqualizedHistogramPanel(Frame frame) {
         return equalizedHistogram;
-    }
-
-    // only support TYPE_3BYTE_BGR now
-    private BufferedImage getGrayImage(BufferedImage image) throws TypeNotSupportedException {
-        ArrayList<Integer> supportedType = new ArrayList<>(
-                Arrays.asList(BufferedImage.TYPE_3BYTE_BGR, BufferedImage.TYPE_BYTE_GRAY)
-        );
-        boolean ok = false;
-        for (Integer type: supportedType) {
-            if (image.getType() == type) {
-                ok = true;
-            }
-        }
-        if (!ok) {
-            throw new TypeNotSupportedException(image.getType());
-        }
-
-        int[] coloredPixels = new int[imageWidth * imageHeight];
-        rawPixels = new int[imageWidth * imageHeight];
-
-        coloredPixels = image.getRGB(0, 0, imageWidth, imageHeight,
-                coloredPixels, 0, imageWidth);
-
-        for (int i = 0; i < coloredPixels.length; i++) {
-            int val = 0;
-            if (image.getType() == BufferedImage.TYPE_3BYTE_BGR) {
-                int bgr = coloredPixels[i];
-                int blue_part = bgr & 0xff0000 >> 16;
-                int green_part = bgr & 0x00ff00 >> 8;
-                int red_part = bgr & 0x0000ff;
-                int gray = (int) (0.299 * red_part + 0.587 * green_part + 0.114 * blue_part);
-                val = gray << 16 | gray << 8 | gray;
-            } else if (image.getType() == BufferedImage.TYPE_BYTE_GRAY) {
-                int bgr = coloredPixels[i];
-                int gray = bgr & 0xff0000 >> 16;
-                assert((bgr & 0x00ff00 >> 8) == gray);
-                assert((bgr & 0x0000ff) == gray);
-                val = gray << 16 | gray << 8 | gray;
-            }
-            rawPixels[i] = val;
-        }
-
-        BufferedImage result = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_BYTE_GRAY);
-        result.setRGB(0, 0, imageWidth, imageHeight, rawPixels, 0, imageWidth);
-
-        return result;
     }
 
     private BufferedImage getEqualizedImage(int[] pixels) {
