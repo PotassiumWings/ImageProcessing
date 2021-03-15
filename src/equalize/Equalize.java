@@ -38,7 +38,8 @@ public class Equalize extends Transform {
             transformedPixels[i] = gray << 16 | gray << 8 | gray;
         }
 
-        BufferedImage result = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_BYTE_GRAY);
+        BufferedImage result = new BufferedImage(imageWidth, imageHeight,
+                BufferedImage.TYPE_BYTE_GRAY);
         result.setRGB(0, 0, imageWidth, imageHeight, transformedPixels, 0, imageWidth);
 
         setTransformedPixels(transformedPixels);

@@ -1,10 +1,11 @@
 package exceptions;
 
 public class AttributeOutOfBoundException extends Exception {
-    private int a;
-    private int b;
-    private int c;
-    private int d;
+    private final int a;
+    private final int b;
+    private final int c;
+    private final int d;
+
     public AttributeOutOfBoundException(int a, int b, int c, int d) {
         this.a = a;
         this.b = b;

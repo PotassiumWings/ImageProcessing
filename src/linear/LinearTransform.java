@@ -3,6 +3,7 @@ package linear;
 import exceptions.AttributeOutOfBoundException;
 import exceptions.TypeNotSupportedException;
 import transform.Transform;
+import utils.LinearTransformMapping;
 
 import java.awt.image.BufferedImage;
 
@@ -37,7 +38,8 @@ public class LinearTransform extends Transform {
         imageHeight = height;
     }
 
-    public void updateAttributes(int a, int b, int c, int d) throws AttributeOutOfBoundException, TypeNotSupportedException {
+    public void updateAttributes(int a, int b, int c, int d)
+            throws AttributeOutOfBoundException, TypeNotSupportedException {
         if (!(0 <= a && a < b && b <= 255 &&
                 0 <= c && c < d && d <= 255)) {
             throw new AttributeOutOfBoundException(a, b, c, d);
@@ -48,19 +50,11 @@ public class LinearTransform extends Transform {
         this.d = d;
         // TO-DO: bug?!
         calculate();
-//        calculateTransformed();
+        //calculateTransformed();
     }
 
     public int mapping(int gray) {
-        int res;
-        if (gray < a) {
-            res = c;
-        } else if(gray > b) {
-            res = d;
-        } else {
-            res = (gray - a) * (d - c) / (b - a) + c;
-        }
-        return res;
+        return LinearTransformMapping.linearTransformMapping(a, b, c, d, gray);
     }
 
     @Override
@@ -73,7 +67,8 @@ public class LinearTransform extends Transform {
             transformedPixels[i] = newGray << 16 | newGray << 8 | newGray;
         }
 
-        BufferedImage result = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_BYTE_GRAY);
+        BufferedImage result = new BufferedImage(imageWidth, imageHeight,
+                BufferedImage.TYPE_BYTE_GRAY);
         result.setRGB(0, 0, imageWidth, imageHeight, transformedPixels, 0, imageWidth);
 
         setTransformedPixels(transformedPixels);

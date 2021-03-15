@@ -53,22 +53,24 @@ public class GrayImageConstructor {
             int val = 0;
             if (image.getType() == BufferedImage.TYPE_3BYTE_BGR) {
                 int bgr = coloredPixels[i];
-                int blue_part = bgr & 0xff0000 >> 16;
-                int green_part = bgr & 0x00ff00 >> 8;
-                int red_part = bgr & 0x0000ff;
-                int gray = (int) (0.299 * red_part + 0.587 * green_part + 0.114 * blue_part);
+                int bluePart = bgr & 0xff0000 >> 16;
+                int greenPart = bgr & 0x00ff00 >> 8;
+                int redPart = bgr & 0x0000ff;
+                int gray = (int) (0.299 * redPart + 0.587 * greenPart + 0.114 * bluePart);
+                //int gray = (redPart + greenPart + bluePart) / 3;
                 val = gray << 16 | gray << 8 | gray;
             } else if (image.getType() == BufferedImage.TYPE_BYTE_GRAY) {
                 int bgr = coloredPixels[i];
                 int gray = bgr & 0xff0000 >> 16;
-                assert((bgr & 0x00ff00 >> 8) == gray);
-                assert((bgr & 0x0000ff) == gray);
+                assert ((bgr & 0x00ff00 >> 8) == gray);
+                assert ((bgr & 0x0000ff) == gray);
                 val = gray << 16 | gray << 8 | gray;
             }
             rawPixels[i] = val;
         }
 
-        BufferedImage result = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_BYTE_GRAY);
+        BufferedImage result = new BufferedImage(imageWidth, imageHeight,
+                BufferedImage.TYPE_BYTE_GRAY);
         result.setRGB(0, 0, imageWidth, imageHeight, rawPixels, 0, imageWidth);
 
         return result;

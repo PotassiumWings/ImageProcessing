@@ -20,7 +20,9 @@ public class ImageFileChooser extends JFileChooser {
         for (String fileExtension : fileExtensions) {
             fileExtensionsString.append("*").append(fileExtension).append(",");
         }
-        fileExtensionsString = new StringBuilder(fileExtensionsString.substring(0, fileExtensionsString.length() - 1));
+        fileExtensionsString = new StringBuilder(
+                fileExtensionsString.substring(0, fileExtensionsString.length() - 1)
+        );
         fileExtensionsString.append(")");
         String finalFileExtensionsString = fileExtensionsString.toString();
 

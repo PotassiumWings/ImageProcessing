@@ -4,12 +4,14 @@ import exceptions.FileChooserNotApproveException;
 import exceptions.TypeNotSupportedException;
 import linear.LinearTransform;
 import linear.LinearTransformFrame;
-import linear.SeperatedLinearTransform;
-import linear.SeperatedLinearTransformFrame;
+import linear.SeparatedLinearTransform;
+import linear.SeparatedLinearTransformFrame;
+import utils.AutoAdjustIcon;
 import utils.FrameSettings;
 import utils.ImageFileChooser;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -17,13 +19,14 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class LaunchFrame extends Frame {
+public class LaunchFrame extends JFrame {
     private String imagePath;
     private BufferedImage image;
+    private JLabel imageLabel = null;
 
     private Equalize equalize;
     private LinearTransform linearTransform;
-    private SeperatedLinearTransform seperatedLinearTransform;
+    private SeparatedLinearTransform separatedLinearTransform;
 
     private int imageHeight;
     private int imageWidth;
@@ -34,10 +37,6 @@ public class LaunchFrame extends Frame {
     private Button linearTransformButton;
     private Button separateLinearTransformButton;
 
-    private EqualizeFrame equalizeFrame;
-    private LinearTransformFrame linearTransformFrame;
-    private SeperatedLinearTransformFrame seperatedLinearTransformFrame;
-
     public LaunchFrame() {
         FrameSettings.setSize(this);
         FrameSettings.setCenter(this);
@@ -46,7 +45,7 @@ public class LaunchFrame extends Frame {
         setPanel();
 
         this.setTitle("Image processing demo");
-        this.setResizable(false);
+        this.setResizable(true);
         this.setVisible(true);
         this.addWindowListener(new WindowAdapter() {
             @Override
@@ -73,7 +72,8 @@ public class LaunchFrame extends Frame {
                 chooseFile();
                 equalize = new Equalize(image, imageWidth, imageHeight);
                 linearTransform = new LinearTransform(image, imageWidth, imageHeight);
-                seperatedLinearTransform = new SeperatedLinearTransform(image, imageWidth, imageHeight);
+                separatedLinearTransform =
+                        new SeparatedLinearTransform(image, imageWidth, imageHeight);
                 repaint();
             } catch (IOException ioException) {
                 ioException.printStackTrace();
@@ -87,7 +87,7 @@ public class LaunchFrame extends Frame {
         equalizationButton.addActionListener(e -> {
             try {
                 equalize.calculate();
-                this.equalizeFrame = new EqualizeFrame(this, equalize);
+                new EqualizeFrame(this, equalize);
                 this.setVisible(false);
             } catch (TypeNotSupportedException typeNotSupportedException) {
                 typeNotSupportedException.print();
@@ -99,7 +99,7 @@ public class LaunchFrame extends Frame {
         linearTransformButton.addActionListener(e -> {
             try {
                 linearTransform.calculate();
-                this.linearTransformFrame = new LinearTransformFrame(this, linearTransform, false);
+                new LinearTransformFrame(this, linearTransform);
                 this.setVisible(false);
             } catch (TypeNotSupportedException typeNotSupportedException) {
                 typeNotSupportedException.print();
@@ -110,8 +110,8 @@ public class LaunchFrame extends Frame {
         separateLinearTransformButton.setFont(FrameSettings.getButtonFont());
         separateLinearTransformButton.addActionListener(e -> {
             try {
-                seperatedLinearTransform.calculate();
-                this.seperatedLinearTransformFrame = new SeperatedLinearTransformFrame(this, seperatedLinearTransform, true);
+                separatedLinearTransform.calculate();
+                new SeparatedLinearTransformFrame(this, separatedLinearTransform);
                 this.setVisible(false);
             } catch (TypeNotSupportedException typeNotSupportedException) {
                 typeNotSupportedException.print();
@@ -124,23 +124,23 @@ public class LaunchFrame extends Frame {
         image = ImageIO.read(new File(imagePath));
         imageHeight = image.getHeight();
         imageWidth = image.getWidth();
+
+        if (imageLabel != null) {
+            imageLabel.setVisible(false);
+            this.remove(imageLabel);
+        }
+        imageLabel = new JLabel();
+        this.add(imageLabel);
+        imageLabel.setIcon(AutoAdjustIcon.getAutoAdjustIcon(image, this));
+        imageLabel.revalidate();
     }
 
     private void setPanel() {
-        Panel panel = new Panel();
+        JPanel panel = new JPanel();
         this.add(panel, BorderLayout.NORTH);
         panel.add(chooseFileButton);
         panel.add(equalizationButton);
         panel.add(linearTransformButton);
         panel.add(separateLinearTransformButton);
-    }
-
-    public void paint(Graphics graphics) {
-        super.paint(graphics);
-        if (image == null) {
-            return;
-        }
-        graphics.drawImage(image, (this.getWidth() - image.getWidth()) / 2,
-                (this.getHeight() - image.getHeight()) / 2, null);
     }
 }

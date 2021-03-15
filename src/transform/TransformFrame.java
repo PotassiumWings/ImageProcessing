@@ -1,6 +1,5 @@
 package transform;
 
-import equalize.Equalize;
 import exceptions.FileChooserNotApproveException;
 import utils.FrameSettings;
 import utils.Histogram;
@@ -25,14 +24,10 @@ public abstract class TransformFrame extends JFrame {
     private static final int W_COUNT = 2;  // label count at width
     private static final int H_COUNT = 2;  // label count at height
 
-    private JLabel[] labels = new JLabel[4];
+    private final JLabel[] labels = new JLabel[4];
 
     public Transform getTransform() {
         return transform;
-    }
-
-    public int getBorder() {
-        return BORDER;
     }
 
     public int getUpBorder() {
@@ -61,12 +56,12 @@ public abstract class TransformFrame extends JFrame {
                 closeWindow();
             }
         });
+    }
+
+    public void setUI() {
         setFileSaver();
-
         setLabels();
-
         setUpPanel();
-
         this.setVisible(true);
     }
 
@@ -95,12 +90,11 @@ public abstract class TransformFrame extends JFrame {
                 int layerHeight = getHeight() - BORDER - upBorder;
                 int gridHeight = layerHeight / H_COUNT;
 
-                int start_x = BORDER + gridWidth * i + GAP;
-                int start_y = upBorder + gridHeight * j + GAP;
+                int startX = BORDER + gridWidth * i + GAP;
+                int startY = upBorder + gridHeight * j + GAP;
                 int width = gridWidth - GAP * 2;
                 int height = gridHeight - GAP * 2;
-                labels[i * 2 + j].setBounds(start_x, start_y, width, height);
-                System.err.println("! " + (i * 2 + j) + ", " + start_x + ", " + start_y + ", " + width + ", " + height);
+                labels[i * 2 + j].setBounds(startX, startY, width, height);
                 this.add(labels[i * 2 + j]);
             }
         }

@@ -14,6 +14,7 @@ public class EqualizeFrame extends TransformFrame {
 
     public EqualizeFrame(Frame fatherFrame, Equalize equalize) {
         super(fatherFrame, equalize);
+        setUI();
     }
 
     @Override

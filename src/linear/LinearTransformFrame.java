@@ -27,16 +27,14 @@ public class LinearTransformFrame extends TransformFrame {
 
     private JLabel lineChart;
 
-    private boolean isSeperate = false;
-
     private int a = 0;
     private int b = 255;
     private int c = 0;
     private int d = 255;
 
-    public LinearTransformFrame(Frame fatherFrame, LinearTransform linearTransform, boolean isSeperate) {
+    public LinearTransformFrame(Frame fatherFrame, LinearTransform linearTransform) {
         super(fatherFrame, linearTransform);
-        this.isSeperate = isSeperate;
+        setUI();
     }
 
     @Override
@@ -55,10 +53,18 @@ public class LinearTransformFrame extends TransformFrame {
 
     @Override
     public void setUpPanel() {
-        lineChart = new LineChart(0, 255, 0, 255, !isSeperate, "");
+        setLineChart(a, b, c, d);
         setTextField();
         setButtons();
         setLabels();
+    }
+
+    public void setLineChart(LineChart lineChart) {
+        this.lineChart = lineChart;
+    }
+
+    public void setLineChart(int a, int b, int c, int d) {
+        setLineChart(new LinearTransformLineChart(a, b, c, d, "Linear"));
     }
 
     public void setTextField() {
@@ -67,12 +73,12 @@ public class LinearTransformFrame extends TransformFrame {
         int textSize = 20;
         labelA.setBounds(50, (upBorder / 2 - textSize) / 2, 50, textSize);
         textFieldA.setBounds(80, (upBorder / 2 - textSize) / 2, width / 8, textSize);
-        labelB.setBounds(50, (3 * upBorder / 2 - textSize) / 2, 50, textSize);
-        textFieldB.setBounds(80, (3 * upBorder / 2 - textSize) / 2, width / 8, textSize);
+        labelB.setBounds(50, 3 * upBorder / 4 - textSize / 2, 50, textSize);
+        textFieldB.setBounds(80, 3 * upBorder / 4 - textSize / 2, width / 8, textSize);
         labelC.setBounds(width / 4 + 50, (upBorder / 2 - textSize) / 2, 50, textSize);
         textFieldC.setBounds(width / 4 + 80, (upBorder / 2 - textSize) / 2, width / 8, textSize);
-        labelD.setBounds(width / 4 + 50, (3 * upBorder / 2 - textSize) / 2, 50, textSize);
-        textFieldD.setBounds(width / 4 + 80, (3 * upBorder / 2 - textSize) / 2, width / 8, textSize);
+        labelD.setBounds(width / 4 + 50, 3 * upBorder / 4 - textSize / 2, 50, textSize);
+        textFieldD.setBounds(width / 4 + 80, 3 * upBorder / 4 - textSize / 2, width / 8, textSize);
 
         lineChart.setBounds(width / 2 + 100, 0, width / 2 - 100, upBorder * 3 / 2);
     }
@@ -123,13 +129,13 @@ public class LinearTransformFrame extends TransformFrame {
         });
     }
 
-    public void labelsRepaint(){
+    public void labelsRepaint() {
         int width = getWidth();
         int upBorder = getUpBorder();
         if (lineChart != null) {
             lineChart.setVisible(false);
         }
-        lineChart = new LineChart(a, b, c, d, !isSeperate, "");
+        setLineChart(a, b, c, d);
         lineChart.setBounds(width / 2 + 100, 0, width / 2 - 100, upBorder * 3 / 2);
         lineChart.repaint();
         this.add(lineChart);

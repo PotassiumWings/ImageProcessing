@@ -9,9 +9,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-
 public abstract class Transform {
-    GrayImageConstructor grayImageConstructor;
+    private GrayImageConstructor grayImageConstructor;
     private BufferedImage grayImage;
     private BufferedImage transformedImage;
 

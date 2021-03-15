@@ -1,14 +1,14 @@
 package exceptions;
 
 public class FileChooserNotApproveException extends Exception {
-    private int FileChooserResult;
+    private final int fileChooserResult;
 
     public FileChooserNotApproveException(int result) {
         super("");
-        FileChooserResult = result;
+        fileChooserResult = result;
     }
 
     public void print() {
-        System.err.println("FileChooserNotApprove, get result = " + FileChooserResult);
+        System.err.println("FileChooserNotApprove, get result = " + fileChooserResult);
     }
 }

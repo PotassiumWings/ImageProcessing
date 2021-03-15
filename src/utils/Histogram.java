@@ -9,7 +9,7 @@ public class Histogram extends JLabel {
     private static final int MAX_HEIGHT = 200;
 
     private static final int START_X = 100;
-    private static final int START_Y = 115;
+    private static final int START_Y = 90;
     private static final int GAP_X = 50;
     
     private static final int END_Y = START_Y + MAX_HEIGHT;
