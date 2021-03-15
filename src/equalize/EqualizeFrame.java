@@ -27,6 +27,11 @@ public class EqualizeFrame extends TransformFrame {
         setPanel();
     }
 
+    @Override
+    public void labelsRepaint() {
+
+    }
+
     public void setButtons() {
         saveButton1 = new Button("Save gray image");
         saveButton1.setFont(FrameSettings.getButtonFont());
@@ -59,6 +64,7 @@ public class EqualizeFrame extends TransformFrame {
         JLabel label = new JLabel();
         label.setBounds(0, 0, getWidth(), getUpBorder());
         this.add(label);
+
         label.add(saveButton1);
         saveButton1.setBounds(getWidth() / 2 - 100, 5, 190, getUpBorder() - 4);
         label.add(saveButton2);

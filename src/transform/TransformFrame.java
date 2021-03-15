@@ -111,8 +111,11 @@ public abstract class TransformFrame extends JFrame {
         for (int i = 0; i < 4; i++) {
             labels[i].setVisible(false);
         }
+        labelsRepaint();
         setLabels();
     }
+
+    public abstract void labelsRepaint();
 
     public void closeWindow() {
         fatherFrame.setVisible(true);
