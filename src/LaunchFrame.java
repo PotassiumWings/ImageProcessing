@@ -4,6 +4,8 @@ import exceptions.FileChooserNotApproveException;
 import exceptions.TypeNotSupportedException;
 import linear.LinearTransform;
 import linear.LinearTransformFrame;
+import linear.SeperatedLinearTransform;
+import linear.SeperatedLinearTransformFrame;
 import utils.FrameSettings;
 import utils.ImageFileChooser;
 
@@ -21,6 +23,7 @@ public class LaunchFrame extends Frame {
 
     private Equalize equalize;
     private LinearTransform linearTransform;
+    private SeperatedLinearTransform seperatedLinearTransform;
 
     private int imageHeight;
     private int imageWidth;
@@ -29,9 +32,11 @@ public class LaunchFrame extends Frame {
     private Button chooseFileButton;
     private Button equalizationButton;
     private Button linearTransformButton;
+    private Button separateLinearTransformButton;
 
     private EqualizeFrame equalizeFrame;
     private LinearTransformFrame linearTransformFrame;
+    private SeperatedLinearTransformFrame seperatedLinearTransformFrame;
 
     public LaunchFrame() {
         FrameSettings.setSize(this);
@@ -68,6 +73,7 @@ public class LaunchFrame extends Frame {
                 chooseFile();
                 equalize = new Equalize(image, imageWidth, imageHeight);
                 linearTransform = new LinearTransform(image, imageWidth, imageHeight);
+                seperatedLinearTransform = new SeperatedLinearTransform(image, imageWidth, imageHeight);
                 repaint();
             } catch (IOException ioException) {
                 ioException.printStackTrace();
@@ -93,7 +99,19 @@ public class LaunchFrame extends Frame {
         linearTransformButton.addActionListener(e -> {
             try {
                 linearTransform.calculate();
-                this.linearTransformFrame = new LinearTransformFrame(this, linearTransform);
+                this.linearTransformFrame = new LinearTransformFrame(this, linearTransform, false);
+                this.setVisible(false);
+            } catch (TypeNotSupportedException typeNotSupportedException) {
+                typeNotSupportedException.print();
+            }
+        });
+
+        separateLinearTransformButton = new Button("Linear Transform");
+        separateLinearTransformButton.setFont(FrameSettings.getButtonFont());
+        separateLinearTransformButton.addActionListener(e -> {
+            try {
+                seperatedLinearTransform.calculate();
+                this.seperatedLinearTransformFrame = new SeperatedLinearTransformFrame(this, seperatedLinearTransform, true);
                 this.setVisible(false);
             } catch (TypeNotSupportedException typeNotSupportedException) {
                 typeNotSupportedException.print();
@@ -114,6 +132,7 @@ public class LaunchFrame extends Frame {
         panel.add(chooseFileButton);
         panel.add(equalizationButton);
         panel.add(linearTransformButton);
+        panel.add(separateLinearTransformButton);
     }
 
     public void paint(Graphics graphics) {

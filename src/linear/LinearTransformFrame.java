@@ -27,13 +27,16 @@ public class LinearTransformFrame extends TransformFrame {
 
     private JLabel lineChart;
 
+    private boolean isSeperate = false;
+
     private int a = 0;
     private int b = 255;
     private int c = 0;
     private int d = 255;
 
-    public LinearTransformFrame(Frame fatherFrame, LinearTransform linearTransform) {
+    public LinearTransformFrame(Frame fatherFrame, LinearTransform linearTransform, boolean isSeperate) {
         super(fatherFrame, linearTransform);
+        this.isSeperate = isSeperate;
     }
 
     @Override
@@ -48,11 +51,11 @@ public class LinearTransformFrame extends TransformFrame {
         labelB = new JLabel("b:");
         labelC = new JLabel("c:");
         labelD = new JLabel("d:");
-        lineChart = new LineChart(0, 255, 0, 255, true, "");
     }
 
     @Override
     public void setUpPanel() {
+        lineChart = new LineChart(0, 255, 0, 255, !isSeperate, "");
         setTextField();
         setButtons();
         setLabels();
@@ -126,7 +129,7 @@ public class LinearTransformFrame extends TransformFrame {
         if (lineChart != null) {
             lineChart.setVisible(false);
         }
-        lineChart = new LineChart(a, b, c, d, true, "");
+        lineChart = new LineChart(a, b, c, d, !isSeperate, "");
         lineChart.setBounds(width / 2 + 100, 0, width / 2 - 100, upBorder * 3 / 2);
         lineChart.repaint();
         this.add(lineChart);

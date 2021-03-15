@@ -15,6 +15,22 @@ public class LinearTransform extends Transform {
     private int c = 0;
     private int d = 255;
 
+    public int getA() {
+        return a;
+    }
+
+    public int getB() {
+        return b;
+    }
+
+    public int getC() {
+        return c;
+    }
+
+    public int getD() {
+        return d;
+    }
+
     public LinearTransform(BufferedImage image, int width, int height) {
         super(image);
         imageWidth = width;
@@ -35,20 +51,25 @@ public class LinearTransform extends Transform {
 //        calculateTransformed();
     }
 
+    public int mapping(int gray) {
+        int res;
+        if (gray < a) {
+            res = c;
+        } else if(gray > b) {
+            res = d;
+        } else {
+            res = (gray - a) * (d - c) / (b - a) + c;
+        }
+        return res;
+    }
+
     @Override
     public void calcTransformedImage(int[] pixels) {
         int[] transformedPixels = new int[imageWidth * imageHeight];
 
         for (int i = 0; i < pixels.length; i++) {
             int gray = pixels[i] & 0xff;
-            int newGray;
-            if (gray < a) {
-                newGray = c;
-            } else if(gray > b) {
-                newGray = d;
-            } else {
-                newGray = (gray - a) * (d - c) / (b - a) + c;
-            }
+            int newGray = mapping(gray);
             transformedPixels[i] = newGray << 16 | newGray << 8 | newGray;
         }
 
