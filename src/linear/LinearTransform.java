@@ -3,6 +3,7 @@ package linear;
 import exceptions.AttributeOutOfBoundException;
 import exceptions.TypeNotSupportedException;
 import transform.Transform;
+import utils.ColorGetter;
 import utils.LinearTransformMapping;
 
 import java.awt.image.BufferedImage;
@@ -58,17 +59,15 @@ public class LinearTransform extends Transform {
     }
 
     @Override
-    public void calcTransformedImage(int[] pixels) {
+    public void calcTransformedImage(int[] pixels, int imageType) {
         int[] transformedPixels = new int[imageWidth * imageHeight];
-
-        for (int i = 0; i < pixels.length; i++) {
-            int gray = pixels[i] & 0xff;
-            int newGray = mapping(gray);
-            transformedPixels[i] = newGray << 16 | newGray << 8 | newGray;
+        for (int channel = 0; channel < 3; channel++) {
+            for (int i = 0; i < pixels.length; i++) {
+                int color = mapping(ColorGetter.getColorValue(pixels[i], channel));
+                transformedPixels[i]  |= color << (8 * channel);
+            }
         }
-
-        BufferedImage result = new BufferedImage(imageWidth, imageHeight,
-                BufferedImage.TYPE_BYTE_GRAY);
+        BufferedImage result = new BufferedImage(imageWidth, imageHeight, imageType);
         result.setRGB(0, 0, imageWidth, imageHeight, transformedPixels, 0, imageWidth);
 
         setTransformedPixels(transformedPixels);

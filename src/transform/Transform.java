@@ -40,21 +40,29 @@ public abstract class Transform {
 
     private void calculateRaw() throws TypeNotSupportedException {
         // get gray image and rawPixels
-        grayImageConstructor = new GrayImageConstructor(image);
-        grayImage = grayImageConstructor.getGrayImage();
-        rawPixels = grayImageConstructor.getRawPixels();
+        // grayImageConstructor = new GrayImageConstructor(image);
+        // grayImageConstructor.getGrayImage();
+        // rawPixels = grayImageConstructor.getRawPixels();
+
+        grayImage = image;
+        getRawPixels();
 
         // get gray image histogram
-        rawHistogram = getHistogram(rawPixels);
+        rawHistogram = getHistogram(rawPixels, image.getType());
         rawHistogram.setString("Before transformation");
     }
 
-    public void calculateTransformed() {
+    private void getRawPixels() {
+        rawPixels = image.getRGB(0, 0, image.getWidth(), image.getHeight(),
+                rawPixels, 0, image.getWidth());
+    }
+
+    public void calculateTransformed() throws TypeNotSupportedException {
         // get transformed image from gray image and rawPixels
-        calcTransformedImage(rawPixels);
+        calcTransformedImage(rawPixels, image.getType());
 
         // get transformed image histogram
-        transformedHistogram = getHistogram(transformedPixels);
+        transformedHistogram = getHistogram(transformedPixels, transformedImage.getType());
         transformedHistogram.setString("After transformation");
     }
 
@@ -86,9 +94,9 @@ public abstract class Transform {
         return transformedHistogram;
     }
 
-    public abstract void calcTransformedImage(int[] pixels);
+    public abstract void calcTransformedImage(int[] pixels, int imageType);
 
-    private Histogram getHistogram(int[] pixels) {
-        return new Histogram(pixels);
+    private Histogram getHistogram(int[] pixels, int imageType) throws TypeNotSupportedException {
+        return new Histogram(pixels, imageType);
     }
 }

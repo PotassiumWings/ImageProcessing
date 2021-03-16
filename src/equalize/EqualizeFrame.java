@@ -34,21 +34,21 @@ public class EqualizeFrame extends TransformFrame {
     }
 
     public void setButtons() {
-        saveButton1 = new Button("Save gray image");
-        saveButton1.setFont(FrameSettings.getButtonFont());
-        saveButton1.addActionListener(e -> {
-            try {
-                saveFile(getTransform().getTransformedImage());
-            } catch (FileChooserNotApproveException fileChooserNotApproveException) {
-                fileChooserNotApproveException.print();
-            }
-        });
+//        saveButton1 = new Button("Save gray image");
+//        saveButton1.setFont(FrameSettings.getButtonFont());
+//        saveButton1.addActionListener(e -> {
+//            try {
+//                saveFile(getTransform().getGrayImage());
+//            } catch (FileChooserNotApproveException fileChooserNotApproveException) {
+//                fileChooserNotApproveException.print();
+//            }
+//        });
 
         saveButton2 = new Button("Save equalized image");
         saveButton2.setFont(FrameSettings.getButtonFont());
         saveButton2.addActionListener(e -> {
             try {
-                saveFile(getTransform().getGrayImage());
+                saveFile(getTransform().getTransformedImage());
             } catch (FileChooserNotApproveException fileChooserNotApproveException) {
                 fileChooserNotApproveException.print();
             }
@@ -66,8 +66,8 @@ public class EqualizeFrame extends TransformFrame {
         label.setBounds(0, 0, getWidth(), getUpBorder());
         this.add(label);
 
-        label.add(saveButton1);
-        saveButton1.setBounds(getWidth() / 2 - 100, 5, 190, getUpBorder() - 4);
+//        label.add(saveButton1);
+//        saveButton1.setBounds(getWidth() / 2 - 100, 5, 190, getUpBorder() - 4);
         label.add(saveButton2);
         saveButton2.setBounds(getWidth() / 2 - 330, 5, 220, getUpBorder() - 4);
 
