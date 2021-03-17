@@ -1,4 +1,4 @@
-package utils;
+package transform;
 
 public class SeparatedLinearTransformMapping {
     public static int linearTransformMapping(int a, int b, int c, int d, int gray) {

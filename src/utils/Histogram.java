@@ -21,9 +21,9 @@ public class Histogram extends JLabel {
 
     private boolean deleted = false;
 
-    private int imageType;
+    private final int imageType;
 
-    public Histogram(int[] pixels, int imageType) throws TypeNotSupportedException {
+    public Histogram(int[] pixels, int imageType) {
         for (int channel = 0; channel < 3; channel++) {
             for (int datum : pixels) {
                 histogram[channel][ColorGetter.getColorValue(datum, channel)]++;
@@ -40,9 +40,6 @@ public class Histogram extends JLabel {
             }
         }
         this.imageType = imageType;
-        if (imageType != BufferedImage.TYPE_BYTE_GRAY && imageType != BufferedImage.TYPE_3BYTE_BGR) {
-            throw new TypeNotSupportedException(imageType);
-        }
     }
 
     public void delete() {

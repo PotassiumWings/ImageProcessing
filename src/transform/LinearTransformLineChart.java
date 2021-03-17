@@ -1,7 +1,4 @@
-package linear;
-
-import utils.LineChart;
-import utils.LinearTransformMapping;
+package transform;
 
 public class LinearTransformLineChart extends LineChart {
     private final int a;

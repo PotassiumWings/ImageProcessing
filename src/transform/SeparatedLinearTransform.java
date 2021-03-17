@@ -1,6 +1,4 @@
-package linear;
-
-import utils.SeparatedLinearTransformMapping;
+package transform;
 
 import java.awt.image.BufferedImage;
 

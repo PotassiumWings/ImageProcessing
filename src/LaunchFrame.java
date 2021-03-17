@@ -1,14 +1,15 @@
-import equalize.Equalize;
-import equalize.EqualizeFrame;
+import transform.Equalize;
+import transform.EqualizeFrame;
 import exceptions.FileChooserNotApproveException;
 import exceptions.TypeNotSupportedException;
-import linear.LinearTransform;
-import linear.LinearTransformFrame;
-import linear.SeparatedLinearTransform;
-import linear.SeparatedLinearTransformFrame;
+import transform.LinearTransform;
+import transform.LinearTransformFrame;
+import transform.SeparatedLinearTransform;
+import transform.SeparatedLinearTransformFrame;
 import utils.AutoAdjustIcon;
 import utils.FrameSettings;
 import utils.ImageFileChooser;
+import utils.ImageTypeFilter;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -79,6 +80,8 @@ public class LaunchFrame extends JFrame {
                 ioException.printStackTrace();
             } catch (FileChooserNotApproveException fileChooserNotApproveException) {
                 fileChooserNotApproveException.print();
+            } catch (TypeNotSupportedException typeNotSupportedException) {
+                typeNotSupportedException.print();
             }
         });
 
@@ -106,7 +109,7 @@ public class LaunchFrame extends JFrame {
             }
         });
 
-        separateLinearTransformButton = new Button("Linear Transform");
+        separateLinearTransformButton = new Button("Sep.Linear Transform");
         separateLinearTransformButton.setFont(FrameSettings.getButtonFont());
         separateLinearTransformButton.addActionListener(e -> {
             try {
@@ -119,9 +122,10 @@ public class LaunchFrame extends JFrame {
         });
     }
 
-    private void chooseFile() throws IOException, FileChooserNotApproveException {
+    private void chooseFile() throws IOException, FileChooserNotApproveException, TypeNotSupportedException {
         imagePath = fileChooser.getImagePath();
         image = ImageIO.read(new File(imagePath));
+        ImageTypeFilter.checkImageType(image.getType());
         imageHeight = image.getHeight();
         imageWidth = image.getWidth();
 

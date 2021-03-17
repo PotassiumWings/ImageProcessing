@@ -1,7 +1,6 @@
-package equalize;
+package transform;
 
 import exceptions.FileChooserNotApproveException;
-import transform.TransformFrame;
 import utils.FrameSettings;
 
 import javax.swing.*;

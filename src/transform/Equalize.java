@@ -1,7 +1,6 @@
-package equalize;
+package transform;
 
 import exceptions.TypeNotSupportedException;
-import transform.Transform;
 import utils.ColorGetter;
 
 import java.awt.image.BufferedImage;
@@ -16,27 +15,10 @@ public class Equalize extends Transform {
         this.imageHeight = height;
     }
 
-    private int getChannel(int type) throws TypeNotSupportedException {
-        if (type == BufferedImage.TYPE_BYTE_GRAY) {
-            return 3;
-        } else if (type == BufferedImage.TYPE_3BYTE_BGR) {
-            return 3;
-        } else {
-            throw new TypeNotSupportedException(type);
-        }
-    }
-
     @Override
     public void calcTransformedImage(int[] pixels, int imageType) {
-        int channels = 0;
-        try {
-            channels = getChannel(imageType);
-        } catch (TypeNotSupportedException e) {
-            e.print();
-        }
-
         int[] transformedPixels = new int[imageWidth * imageHeight];
-        for (int channel = 0; channel < channels; channel++) {
+        for (int channel = 0; channel < 3; channel++) {
             int[] colorArray = new int[256];
             int[] prefixSum = new int[256];
             for (int pixel : pixels) {

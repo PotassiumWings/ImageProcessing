@@ -1,10 +1,8 @@
-package linear;
+package transform;
 
 import exceptions.AttributeOutOfBoundException;
 import exceptions.TypeNotSupportedException;
-import transform.Transform;
 import utils.ColorGetter;
-import utils.LinearTransformMapping;
 
 import java.awt.image.BufferedImage;
 

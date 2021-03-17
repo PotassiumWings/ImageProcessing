@@ -38,7 +38,7 @@ public abstract class Transform {
         calculateTransformed();
     }
 
-    private void calculateRaw() throws TypeNotSupportedException {
+    private void calculateRaw() {
         // get gray image and rawPixels
         // grayImageConstructor = new GrayImageConstructor(image);
         // grayImageConstructor.getGrayImage();
@@ -57,7 +57,7 @@ public abstract class Transform {
                 rawPixels, 0, image.getWidth());
     }
 
-    public void calculateTransformed() throws TypeNotSupportedException {
+    public void calculateTransformed() {
         // get transformed image from gray image and rawPixels
         calcTransformedImage(rawPixels, image.getType());
 
@@ -96,7 +96,7 @@ public abstract class Transform {
 
     public abstract void calcTransformedImage(int[] pixels, int imageType);
 
-    private Histogram getHistogram(int[] pixels, int imageType) throws TypeNotSupportedException {
+    private Histogram getHistogram(int[] pixels, int imageType) {
         return new Histogram(pixels, imageType);
     }
 }

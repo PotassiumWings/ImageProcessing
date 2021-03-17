@@ -12,6 +12,25 @@ import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 
 public abstract class TransformFrame extends JFrame {
+//    UpPanel
+//
+//    |--------------------------------------------------------------------|
+//    |                              |                                     |
+//    |                              |      red            green           |
+//    |                              |                                     |
+//    |          rawImage            |                                     |
+//    |                              |     blue          rawHistogram      |
+//    |                              |                                     |
+//    |                              |                                     |
+//    |--------------------------------------------------------------------|
+//    |                              |                                     |
+//    |                              |                                     |
+//    |          transformed         |             (gray)                  |
+//    |            Image             |                                     |
+//    |                              |         transformedHistogram        |
+//    |                              |                                     |
+//    |                              |                                     |
+//    |--------------------------------------------------------------------|
     private final Frame fatherFrame;
     private final Transform transform;
     private ImageFileSaver fileSaver;

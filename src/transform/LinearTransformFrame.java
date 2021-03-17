@@ -1,16 +1,21 @@
-package linear;
+package transform;
 
 import exceptions.AttributeOutOfBoundException;
 import exceptions.FileChooserNotApproveException;
 import exceptions.TypeNotSupportedException;
-import transform.TransformFrame;
 import utils.FrameSettings;
-import utils.LineChart;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class LinearTransformFrame extends TransformFrame {
+//     UpPanel:
+//    |---------------------------------------------------------------------------|
+//    |    a:  textField      c:  textField       submit           |              |
+//    |                                           return           | lineChart    |
+//    |    b:  textField      d:  textField       save             |----------    |
+//    |                                                                           |
+//    |---------------------------------------------------------------------------|
     private JTextField textFieldA;
     private JTextField textFieldB;
     private JTextField textFieldC;
