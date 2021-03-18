@@ -18,7 +18,7 @@ public class EqualizeFrame extends TransformFrame {
 
     @Override
     public void init() {
-        this.setTitle("Equalization | Image processing demo");
+        this.setTitle("Equalization | " + FrameSettings.getName());
     }
 
     @Override

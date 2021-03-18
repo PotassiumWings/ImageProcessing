@@ -44,7 +44,7 @@ public class LinearTransformFrame extends TransformFrame {
 
     @Override
     public void init() {
-        this.setTitle("Linear Transformation | Image processing demo");
+        this.setTitle("Linear Transformation | " + FrameSettings.getName());
         setUpBorder(100);
         textFieldA = new JTextField(4);
         textFieldB = new JTextField(4);

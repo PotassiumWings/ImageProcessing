@@ -16,6 +16,18 @@ public class FrameSettings {
         frame.setSize(FRAME_WIDTH, FRAME_HEIGHT);
     }
 
+    public static String getName() {
+        return "Remarkable Image Processing-" + getStudentId() + getStudentName();
+    }
+
+    public static int getStudentId() {
+        return 18373019;
+    }
+
+    public static String getStudentName() {
+        return "牟钰";
+    }
+
     public static void setCenter(Frame frame) {
         Toolkit kit = Toolkit.getDefaultToolkit();
         frame.setLocation((kit.getScreenSize().width - frame.getWidth()) / 2,

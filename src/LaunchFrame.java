@@ -45,7 +45,7 @@ public class LaunchFrame extends JFrame {
         setButtons();
         setPanel();
 
-        this.setTitle("Image processing demo");
+        this.setTitle(FrameSettings.getName());
         this.setResizable(true);
         this.setVisible(true);
         this.addWindowListener(new WindowAdapter() {
