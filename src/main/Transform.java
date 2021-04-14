@@ -79,6 +79,14 @@ public abstract class Transform {
         transformedExpressionImage = image;
     }
 
+    public BufferedImage getRawExpressionImage() {
+        return rawExpressionImage;
+    }
+
+    public BufferedImage getTransformedExpressionImage() {
+        return transformedExpressionImage;
+    }
+
     public void setTransformedImage(BufferedImage image) {
         this.transformedImage = image;
     }

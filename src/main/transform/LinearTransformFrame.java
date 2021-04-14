@@ -110,7 +110,7 @@ public class LinearTransformFrame extends TransformFrame {
                 this.b = b;
                 this.c = c;
                 this.d = d;
-                repaintComponents();
+                repaintComponents(true);
             } catch (NumberFormatException numberFormatException) {
                 numberFormatException.printStackTrace();
             } catch (AttributeOutOfBoundException attributeOutOfBoundException) {

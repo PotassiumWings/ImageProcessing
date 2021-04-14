@@ -21,7 +21,11 @@ public abstract class TransformWithFFT extends Transform {
     private Complex[][] rawComplex;
     private Complex[][] transformedComplex;
 
+    private double radius = 0.2;
+
     private FFT2D fft2D;
+
+    private boolean getMiddle = false;
 
     public TransformWithFFT(BufferedImage image) {
         super(image);
@@ -34,7 +38,7 @@ public abstract class TransformWithFFT extends Transform {
     }
 
     public void calculate() {
-        // raw image and expression
+        // raw image
         getRawPixels();
         fft2D = new FFT2D(image.getWidth(), image.getHeight());
         paddingHeight = fft2D.getPaddingHeight();
@@ -43,28 +47,47 @@ public abstract class TransformWithFFT extends Transform {
             rawComplex[i] = fft2D.getDFT(rawPixels[i]);
         }
 
+        // raw expression
         BufferedImage rawExpression = new BufferedImage(paddingWidth, paddingHeight, imageType);
         rawExpression.setRGB(0, 0, paddingWidth, paddingHeight,
                 FFTUtils.getDisplayFFTPixels(FFTShift.shift(rawComplex, paddingWidth, paddingHeight), true),
                 0, paddingWidth);
         setRawExpression(rawExpression);
 
-        // transformed image and expression
-        calcTransformedImage(rawComplex);
+        // transformed expression(shift)
+        calcTransformedImage(
+                FFTShift.shift(rawComplex, paddingWidth, paddingHeight),
+                paddingWidth, paddingHeight, radius, getMiddle
+        );
+    }
+
+    public void setRadius(double radius) {
+        this.radius = radius;
+    }
+
+    public void recalculate() {
+        calcTransformedImage(
+                FFTShift.shift(rawComplex, paddingWidth, paddingHeight),
+                paddingWidth, paddingHeight, radius, getMiddle
+        );
+    }
+
+    public void updateTransformedComplex(Complex[][] complex) {
+        transformedComplex = complex;
         BufferedImage transformedExpression = new BufferedImage(paddingWidth, paddingHeight, imageType);
         transformedExpression.setRGB(0, 0, paddingWidth, paddingHeight,
-                FFTUtils.getDisplayFFTPixels(FFTShift.shift(transformedComplex, paddingWidth, paddingHeight), true),
-                0, paddingWidth);
+                FFTUtils.getDisplayFFTPixels(transformedComplex, true), 0, paddingWidth);
         setTransformedExpression(transformedExpression);
 
+        // transformed image
+        Complex[][] shiftedComplex = FFTShift.shift(transformedComplex, paddingWidth, paddingHeight);
         BufferedImage result = new BufferedImage(imageWidth, imageHeight, imageType);
-        int[] inversePixels = new int[imageHeight * imageWidth];
         Complex[][] adjustComplex = new Complex[3][imageHeight * imageWidth];
         for (int i = 0; i < 3; i++) {
-            Complex[] complex = fft2D.getInverse(transformedComplex[i]);
+            Complex[] complexes = fft2D.getInverse(shiftedComplex[i]);
             for (int j = 0; j < imageHeight; j++) {
                 for (int k = 0; k < imageWidth; k++) {
-                    adjustComplex[i][j * imageWidth + k] = complex[j * paddingWidth + k];
+                    adjustComplex[i][j * imageWidth + k] = complexes[j * paddingWidth + k];
                 }
             }
         }
@@ -73,16 +96,17 @@ public abstract class TransformWithFFT extends Transform {
         setTransformedImage(result);
     }
 
-    public void setTransformedComplex(Complex[][] complex) {
-        transformedComplex = complex;
-    }
-
     public void setTransformedImage(BufferedImage image) {
         super.setTransformedImage(image);
         this.transformedImage = image;
     }
 
-    public abstract void calcTransformedImage(Complex[][] pixels);
+    public void flip() {
+        this.getMiddle ^= true;
+    }
+
+    public abstract void calcTransformedImage(Complex[][] pixels,
+                                              int width, int height, double radius, boolean getMiddle);
 
     private void getRawPixels() {
         int[] pixels = new int[imageWidth * imageHeight];

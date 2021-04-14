@@ -120,8 +120,10 @@ public abstract class TransformFrame extends JFrame {
         }
     }
 
-    public void repaintComponents() {
-        ((Histogram) (labels[3])).delete();
+    public void repaintComponents(boolean isHistogram) {
+        if (isHistogram) {
+            ((Histogram) (labels[3])).delete();
+        }
         for (int i = 0; i < 4; i++) {
             labels[i].setVisible(false);
         }

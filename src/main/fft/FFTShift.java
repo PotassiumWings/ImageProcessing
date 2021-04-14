@@ -21,13 +21,6 @@ public class FFTShift {
                     shift[c][x * w + y] = toBeFilled;
                 }
             }
-            for (int i = 0; i < h; i++) {
-                for (int j = 0; j < w; j++) {
-                    if (shift[c][i * w + j] == null) {
-                        System.err.println(i + " " + j);
-                    }
-                }
-            }
         }
         return shift;
     }
