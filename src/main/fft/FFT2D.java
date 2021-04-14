@@ -9,44 +9,28 @@ public class FFT2D {
     private final int originWidth;
     private final int originHeight;
 
-    private FFT fftW;
-    private FFT fftH;
+    private final FFT fftW;
+    private final FFT fftH;
 
-    private int adjust(int input) {
-        int limit = 1;
-        while (limit < input) {
-            limit <<= 1;
-        }
-        return limit;
-    }
-
-    private double[] getPaddingArray(int[] pixels) {
-        double[] res = new double[width * height];
-        for (int i = 0; i < this.height; i++) {
-            for (int j = 0; j < width; j++) {
-                if (i < originWidth && j < originHeight) {
-                    res[i * width + j] = pixels[i * width + j];
-                } else {
-                    res[i * width + j] = 0;
-                }
-            }
-        }
-        return res;
-    }
-
-    public FFT2D(int[] pixels, int width, int height) {
-        assert (pixels.length == width * height);
+    public FFT2D(int width, int height) {
         this.originWidth = width;
         this.originHeight = height;
         this.width = adjust(width);
         this.height = adjust(height);
+        fftW = new FFT(width);
+        fftH = new FFT(height);
+    }
 
-        constructFFT(getPaddingArray(pixels));
+    public int getPaddingWidth() {
+        return width;
+    }
+
+    public int getPaddingHeight() {
+        return height;
     }
 
     private void constructFFT(double[] pixels) {
-        fftW = new FFT(width);
-        // main.fft at width
+        // fft at width
         Complex[] agent = new Complex[width * height];
         for (int i = 0; i < height; i++) {
             Complex[] array = new Complex[width];
@@ -59,9 +43,8 @@ public class FFT2D {
             }
         }
 
-        // main.fft at height
+        // fft at height
         destination = new Complex[width * height];
-        fftH = new FFT(height);
         for (int i = 0; i < width; i++) {
             Complex[] array = new Complex[height];
             for (int j = 0; j < height; j++) {
@@ -75,7 +58,7 @@ public class FFT2D {
     }
 
     private void inverseFFT(Complex[] dft) {
-        // main.fft at height
+        // fft at height
         Complex[] agent = new Complex[width * height];
         for (int i = 0; i < width; i++) {
             Complex[] array = new Complex[height];
@@ -87,7 +70,8 @@ public class FFT2D {
                 agent[j * width + i] = result[j];
             }
         }
-        // main.fft at width
+
+        // fft at width
         inverse = new Complex[width * height];
         for (int i = 0; i < height; i++) {
             Complex[] array = new Complex[width];
@@ -99,12 +83,36 @@ public class FFT2D {
         }
     }
 
-    public Complex[] getDestination() {
+    public Complex[] getDFT(int[] pixels) {
+        assert (pixels.length == width * height);
+        constructFFT(getPaddingArray(pixels));
         return destination;
     }
 
     public Complex[] getInverse(Complex[] dft) {
         inverseFFT(dft);
         return inverse;
+    }
+
+    private int adjust(int input) {
+        int limit = 1;
+        while (limit < input) {
+            limit <<= 1;
+        }
+        return limit;
+    }
+
+    private double[] getPaddingArray(int[] pixels) {
+        double[] res = new double[width * height];
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                if (i < originWidth && j < originHeight) {
+                    res[i * width + j] = pixels[i * originWidth + j];
+                } else {
+                    res[i * width + j] = 0;
+                }
+            }
+        }
+        return res;
     }
 }

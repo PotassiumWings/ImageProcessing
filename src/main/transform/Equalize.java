@@ -1,6 +1,5 @@
 package main.transform;
 
-import main.Transform;
 import main.utils.ColorGetter;
 
 import java.awt.image.BufferedImage;

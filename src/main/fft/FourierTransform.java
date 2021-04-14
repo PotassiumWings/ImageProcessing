@@ -5,12 +5,11 @@ import java.awt.image.BufferedImage;
 public class FourierTransform extends TransformWithFFT {
     public FourierTransform(BufferedImage image) {
         super(image);
-
     }
 
     @Override
-    public void calculate() {
-
+    public void calcTransformedImage(Complex[][] pixels) {
+        setTransformedComplex(pixels);
     }
 
     @Override

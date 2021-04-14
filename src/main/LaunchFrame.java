@@ -31,6 +31,8 @@ public class LaunchFrame extends JFrame {
     private Button transformButton;
     private Button fftButton;
 
+    private FourierTransform fourierTransform;
+
     private int imageHeight;
     private int imageWidth;
 
@@ -75,17 +77,19 @@ public class LaunchFrame extends JFrame {
             }
         });
 
-        transformButton = new Button("main.Transform without FFT");
+        transformButton = new Button("Transform without FFT");
         transformButton.setFont(FrameSettings.getButtonFont());
         transformButton.addActionListener(e -> {
             new TransformLaunchFrame(this, image, imageWidth, imageHeight);
             this.setVisible(false);
         });
 
-        fftButton = new Button("main.Transform without FFT");
+        fftButton = new Button("Transform with FFT");
         fftButton.setFont(FrameSettings.getButtonFont());
         fftButton.addActionListener(e -> {
-            new FFTLaunchFrame(this, new FourierTransform(image), image, imageWidth, imageHeight);
+            fourierTransform = new FourierTransform(image);
+            fourierTransform.calculate();
+            new FFTLaunchFrame(this, fourierTransform);
             this.setVisible(false);
         });
     }
@@ -116,5 +120,6 @@ public class LaunchFrame extends JFrame {
         this.add(panel, BorderLayout.NORTH);
         panel.add(chooseFileButton);
         panel.add(transformButton);
+        panel.add(fftButton);
     }
 }

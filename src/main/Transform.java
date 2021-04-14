@@ -1,13 +1,12 @@
 package main;
 
-import main.utils.Histogram;
-import main.exceptions.TypeNotSupportedException;
 import main.utils.AutoAdjustIcon;
-import main.utils.GrayImageConstructor;
+import main.utils.Histogram;
 
 import javax.swing.JLabel;
 import java.awt.Frame;
 import java.awt.image.BufferedImage;
+import java.nio.Buffer;
 
 public abstract class Transform {
     private BufferedImage transformedImage;
@@ -15,6 +14,9 @@ public abstract class Transform {
     private final BufferedImage image;
     private JLabel rawExpression;
     private JLabel transformedExpression;
+
+    private BufferedImage rawExpressionImage;
+    private BufferedImage transformedExpressionImage;
 
     public Transform(BufferedImage image) {
         this.image = image;
@@ -26,24 +28,39 @@ public abstract class Transform {
         return transformedImage;
     }
 
+//    four essential functions to show the images/histograms
+//   |------------------------|--------------------------------------|
+//   | originImagePanel       |        originExpressionPanel         |
+//   |------------------------|--------------------------------------|
+//   | transformedImagePanel  |        transformedExpressionPanel    |
+//   |------------------------|--------------------------------------|
+
     public JLabel getOriginImagePanel(Frame frame) {
-        JLabel label = new JLabel();
-        label.setIcon(AutoAdjustIcon.getAutoAdjustIcon(image, frame));
-        return label;
+        return getLabelFromImageAndFrame(image, frame);
     }
 
     public JLabel getTransformedImagePanel(Frame frame) {
+        return getLabelFromImageAndFrame(transformedImage, frame);
+    }
+
+    public JLabel getOriginExpressionPanel(Frame frame) {
+        if (rawExpression != null) {
+            return rawExpression;
+        }
+        return getLabelFromImageAndFrame(rawExpressionImage, frame);
+    }
+
+    public JLabel getTransformedExpressionPanel(Frame frame) {
+        if (transformedExpression != null) {
+            return transformedExpression;
+        }
+        return getLabelFromImageAndFrame(transformedExpressionImage, frame);
+    }
+
+    private JLabel getLabelFromImageAndFrame(BufferedImage image, Frame frame) {
         JLabel label = new JLabel();
-        label.setIcon(AutoAdjustIcon.getAutoAdjustIcon(transformedImage, frame));
+        label.setIcon(AutoAdjustIcon.getAutoAdjustIcon(image, frame));
         return label;
-    }
-
-    public JLabel getOriginExpressionPanel() {
-        return rawExpression;
-    }
-
-    public JLabel getTransformedExpressionPanel() {
-        return transformedExpression;
     }
 
     public void setRawExpression(JLabel label) {
@@ -52,6 +69,14 @@ public abstract class Transform {
 
     public void setTransformedExpression(JLabel label) {
         transformedExpression = label;
+    }
+
+    public void setRawExpression(BufferedImage image) {
+        rawExpressionImage = image;
+    }
+
+    public void setTransformedExpression(BufferedImage image) {
+        transformedExpressionImage = image;
     }
 
     public void setTransformedImage(BufferedImage image) {

@@ -17,14 +17,14 @@ public class FFT2DTest {
                 pixels[i * w + j] = (i < 8) ? 255 : 0;
             }
         }
-        FFT2D FFT2D = new FFT2D(pixels, w, h);
+        FFT2D FFT2D = new FFT2D(w, h);
         for (int i = 0; i < h; i++) {
             for (int j = 0; j < w; j++) {
                 System.out.print(pixels[i * w + j] + "\t");
             }
             System.out.println();
         }
-        Complex[] complex = FFT2D.getDestination();
+        Complex[] complex = FFT2D.getDFT(pixels);
         for (int i = 0; i < h; i++) {
             for (int j = 0; j < w; j++) {
                 Complex toPrint = complex[i * w + j];

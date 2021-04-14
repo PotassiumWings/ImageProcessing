@@ -4,46 +4,16 @@ import main.TransformFrame;
 import main.utils.FrameSettings;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
-import java.awt.BorderLayout;
+import javax.swing.JLabel;
 import java.awt.Button;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.image.BufferedImage;
 
 public class FFTLaunchFrame extends TransformFrame {
-    private JFrame fatherFrame;
-    private BufferedImage image;
-    private int imageWidth;
-    private int imageHeight;
-    private FourierTransform fourierTransform;
-
     private Button actButton;
     private Button returnButton;
 
-    public FFTLaunchFrame(JFrame fatherFrame, FourierTransform fourierTransform,
-                          BufferedImage image, int imageWidth, int imageHeight) {
+    public FFTLaunchFrame(JFrame fatherFrame, FourierTransform fourierTransform) {
         super(fatherFrame, fourierTransform);
-        this.fourierTransform = fourierTransform;
-
-        this.imageWidth = imageWidth;
-        this.imageHeight = imageHeight;
-
-        FrameSettings.setSize(this);
-        FrameSettings.setCenter(this);
-        setButtons();
-        setPanel();
-
-        this.setTitle(FrameSettings.getName());
-        this.setResizable(true);
-        this.setVisible(true);
-        this.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                super.windowClosing(e);
-                closeWindow();
-            }
-        });
+        setUI();
     }
 
     public void init() {
@@ -51,7 +21,8 @@ public class FFTLaunchFrame extends TransformFrame {
     }
 
     public void setUpPanel() {
-
+        setButtons();
+        setPanel();
     }
 
     public void labelsRepaint() {
@@ -73,9 +44,14 @@ public class FFTLaunchFrame extends TransformFrame {
     }
 
     private void setPanel() {
-        JPanel panel = new JPanel();
-        this.add(panel, BorderLayout.NORTH);
-        panel.add(actButton);
-        panel.add(returnButton);
+        JLabel label = new JLabel();
+        label.setBounds(0, 0, getWidth(), getUpBorder());
+        this.add(label);
+
+        label.add(actButton);
+        actButton.setBounds(getWidth() / 2 - 330, 5, 220, getUpBorder() - 4);
+
+        label.add(returnButton);
+        returnButton.setBounds(getWidth() / 2 + 100, 5, 120, getUpBorder() - 4);
     }
 }
