@@ -1,29 +1,34 @@
 package main.fft;
 
 public class FFTShift {
-    private final Complex[] shift;
 
-    public FFTShift(Complex[] complexes, int w, int h) {
-        this.shift = new Complex[w * h];
-        for (int i = 0; i < h; i++) {
-            for (int j = 0; j < w; j++) {
-                Complex toBeFilled = (Complex) complexes[i * w + j].clone();
-                int x, y;
-                if (i < h / 2 && j < w / 2) {
-                    x = i; y = j;
-                } else if (i < h / 2 && j >= w / 2) {
-                    x = i + h / 2; y = j - w / 2;
-                } else if (i >= h / 2 && j < w / 2) {
-                    x = i - h / 2; y = j + w / 2;
-                } else {
-                    x = i - h / 2; y = j - w / 2;
+    public static Complex[][] shift(Complex[][] complexes, int w, int h) {
+        Complex[][] shift = new Complex[3][w * h];
+        for (int c = 0; c < 3; c++) {
+            for (int i = 0; i < h; i++) {
+                for (int j = 0; j < w; j++) {
+                    Complex toBeFilled = (Complex) complexes[c][i * w + j].clone();
+                    int x, y;
+                    if (i < h / 2 && j < w / 2) {
+                        x = i + h / 2; y = j + w / 2;
+                    } else if (i < h / 2 && j >= w / 2) {
+                        x = i + h / 2; y = j - w / 2;
+                    } else if (i >= h / 2 && j < w / 2) {
+                        x = i - h / 2; y = j + w / 2;
+                    } else {
+                        x = i - h / 2; y = j - w / 2;
+                    }
+                    shift[c][x * w + y] = toBeFilled;
                 }
-                shift[x * w + y] = toBeFilled;
+            }
+            for (int i = 0; i < h; i++) {
+                for (int j = 0; j < w; j++) {
+                    if (shift[c][i * w + j] == null) {
+                        System.err.println(i + " " + j);
+                    }
+                }
             }
         }
-    }
-
-    public Complex[] getShift() {
         return shift;
     }
 }

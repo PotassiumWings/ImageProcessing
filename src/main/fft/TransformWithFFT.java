@@ -45,14 +45,16 @@ public abstract class TransformWithFFT extends Transform {
 
         BufferedImage rawExpression = new BufferedImage(paddingWidth, paddingHeight, imageType);
         rawExpression.setRGB(0, 0, paddingWidth, paddingHeight,
-                FFTUtils.getDisplayFFTPixels(rawComplex), 0, paddingWidth);
+                FFTUtils.getDisplayFFTPixels(FFTShift.shift(rawComplex, paddingWidth, paddingHeight), true),
+                0, paddingWidth);
         setRawExpression(rawExpression);
 
         // transformed image and expression
         calcTransformedImage(rawComplex);
         BufferedImage transformedExpression = new BufferedImage(paddingWidth, paddingHeight, imageType);
         transformedExpression.setRGB(0, 0, paddingWidth, paddingHeight,
-                FFTUtils.getDisplayFFTPixels(transformedComplex), 0, paddingWidth);
+                FFTUtils.getDisplayFFTPixels(FFTShift.shift(transformedComplex, paddingWidth, paddingHeight), true),
+                0, paddingWidth);
         setTransformedExpression(transformedExpression);
 
         BufferedImage result = new BufferedImage(imageWidth, imageHeight, imageType);
@@ -67,7 +69,7 @@ public abstract class TransformWithFFT extends Transform {
             }
         }
         result.setRGB(0, 0, imageWidth, imageHeight,
-                FFTUtils.getDisplayFFTPixels(adjustComplex), 0, imageWidth);
+                FFTUtils.getDisplayFFTPixels(adjustComplex, false), 0, imageWidth);
         setTransformedImage(result);
     }
 
