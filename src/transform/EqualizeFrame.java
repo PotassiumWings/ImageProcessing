@@ -3,8 +3,9 @@ package transform;
 import exceptions.FileChooserNotApproveException;
 import utils.FrameSettings;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JLabel;
+import java.awt.Button;
+import java.awt.Frame;
 
 public class EqualizeFrame extends TransformFrame {
     private Button saveButton1;

@@ -5,8 +5,8 @@ import exceptions.TypeNotSupportedException;
 import utils.AutoAdjustIcon;
 import utils.GrayImageConstructor;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JLabel;
+import java.awt.Frame;
 import java.awt.image.BufferedImage;
 
 public abstract class Transform {

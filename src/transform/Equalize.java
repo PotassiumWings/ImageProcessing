@@ -1,6 +1,5 @@
 package transform;
 
-import exceptions.TypeNotSupportedException;
 import utils.ColorGetter;
 
 import java.awt.image.BufferedImage;

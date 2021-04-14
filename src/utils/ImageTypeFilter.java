@@ -12,7 +12,7 @@ public class ImageTypeFilter {
             type == BufferedImage.TYPE_BYTE_GRAY ||
             type == BufferedImage.TYPE_BYTE_BINARY ||
             type == BufferedImage.TYPE_BYTE_INDEXED) {
-            return ;
+            return;
         }
         throw new TypeNotSupportedException(type);
     }

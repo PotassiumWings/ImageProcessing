@@ -5,8 +5,9 @@ import utils.FrameSettings;
 import utils.Histogram;
 import utils.ImageFileSaver;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import java.awt.Frame;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;

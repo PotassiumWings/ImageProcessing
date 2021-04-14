@@ -1,6 +1,6 @@
 package transform;
 
-import java.awt.*;
+import java.awt.Frame;
 
 public class SeparatedLinearTransformFrame extends LinearTransformFrame {
     public SeparatedLinearTransformFrame(Frame fatherFrame, LinearTransform linearTransform) {

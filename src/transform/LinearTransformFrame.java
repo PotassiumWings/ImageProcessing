@@ -5,8 +5,10 @@ import exceptions.FileChooserNotApproveException;
 import exceptions.TypeNotSupportedException;
 import utils.FrameSettings;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import java.awt.Button;
+import java.awt.Frame;
 
 public class LinearTransformFrame extends TransformFrame {
 //     UpPanel:

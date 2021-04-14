@@ -2,7 +2,7 @@ package utils;
 
 import exceptions.FileChooserNotApproveException;
 
-import javax.swing.*;
+import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileSystemView;
 import java.io.File;

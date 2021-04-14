@@ -1,7 +1,11 @@
 package utils;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.ImageIcon;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Point;
 import java.awt.image.ImageObserver;
 
 public class AutoAdjustIcon {

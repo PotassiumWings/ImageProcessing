@@ -1,6 +1,8 @@
 package utils;
 
-import java.awt.*;
+import java.awt.Font;
+import java.awt.Frame;
+import java.awt.Toolkit;
 
 public class FrameSettings {
     private static final int FRAME_WIDTH = 960;
