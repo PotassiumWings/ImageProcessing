@@ -8,11 +8,15 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import java.awt.Button;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class FFTLaunchFrame extends TransformFrame {
     private Button actButton;
     private Button returnButton;
     private Button reverseButton;
+    private Button gaussianButton;
+    private Button waveButton;
 
     private Button saveFFT1Button;
     private Button saveFFT2Button;
@@ -44,12 +48,55 @@ public class FFTLaunchFrame extends TransformFrame {
         actButton = new Button("Calculate FFT");
         actButton.setFont(FrameSettings.getButtonFont());
         actButton.addActionListener(e -> {
-            double p = Double.parseDouble(textField.getText());
-            if (p >= 1 || p <= 0) {
-                throw new NumberFormatException("");
+            double p = -1;
+            try {
+                p = Double.parseDouble(textField.getText());
+            } catch (Exception ignored){
+                ;
             }
-            ((TransformWithFFT) getTransform()).setRadius(p);
+            if (p >= 0 && p <= 1) {
+                ((TransformWithFFT) getTransform()).setRadius(p);
+            }
             ((TransformWithFFT) getTransform()).recalculate();
+            repaintComponents(false);
+        });
+
+        waveButton = new Button("Wave!");
+        waveButton.setFont(FrameSettings.getButtonFont());
+        waveButton.addActionListener(e -> {
+            double p = -1;
+            try {
+                p = Double.parseDouble(textField.getText());
+            } catch (Exception ignored) {
+                ;
+            }
+            if (p >= 0 && p <= 1) {
+                ((TransformWithFFT) getTransform()).setRadius(p);
+            }
+            ((TransformWithFFT) getTransform()).waveFilter();
+            repaintComponents(false);
+        });
+
+        gaussianButton = new Button("Gau Fil");
+        gaussianButton.setFont(FrameSettings.getButtonFont());
+        gaussianButton.addActionListener(e -> {
+            double p = -1;
+            int len = 3;
+            try {
+                ArrayList<String> params = new ArrayList<String>(Arrays.asList(textField.getText().split("[ \t,/|]")));
+                params.removeIf(e2 -> e2.equals(""));
+                String[] strings = params.toArray(new String[0]);
+                p = Double.parseDouble(strings[0]);
+                len = Integer.parseInt(strings[1]);
+                System.err.println("p: " + p + ", len: " + len);
+            } catch (Exception ignored) {
+                ;
+            }
+            if (p >= 0) {
+                ((TransformWithFFT) getTransform()).setRadius(p);
+                ((TransformWithFFT) getTransform()).setGaussianLength(len);
+            }
+            ((TransformWithFFT) getTransform()).gaussianFilter();
             repaintComponents(false);
         });
 
@@ -64,6 +111,8 @@ public class FFTLaunchFrame extends TransformFrame {
             }
             if (p >= 0 && p <= 1) {
                 ((TransformWithFFT) getTransform()).setRadius(p);
+            } else {
+                ((TransformWithFFT) getTransform()).setRadius(0.2);
             }
             ((TransformWithFFT) getTransform()).flip();
             ((TransformWithFFT) getTransform()).recalculate();
@@ -112,7 +161,7 @@ public class FFTLaunchFrame extends TransformFrame {
         label.setBounds(0, 0, getWidth(), getUpBorder());
         this.add(label);
 
-        labelRadius = new JLabel("Radius:");
+        labelRadius = new JLabel("Paras:");
         textField = new JTextField(4);
 
         label.add(labelRadius);
@@ -124,19 +173,25 @@ public class FFTLaunchFrame extends TransformFrame {
         label.add(reverseButton);
         reverseButton.setBounds(155, 5, 40, getUpBorder() - 4);
 
+        label.add(gaussianButton);
+        gaussianButton.setBounds(200, 5, 70, getUpBorder() - 4);
+
+        label.add(waveButton);
+        waveButton.setBounds(275, 5, 70, getUpBorder() - 4);
+
         label.add(actButton);
-        actButton.setBounds(200, 5, 140, getUpBorder() - 4);
+        actButton.setBounds(350, 5, 140, getUpBorder() - 4);
 
         label.add(saveFFT1Button);
-        saveFFT1Button.setBounds(350, 5, 100, getUpBorder() - 4);
+        saveFFT1Button.setBounds(490, 5, 60, getUpBorder() - 4);
 
         label.add(saveFFT2Button);
-        saveFFT2Button.setBounds(460, 5, 100, getUpBorder() - 4);
+        saveFFT2Button.setBounds(560, 5, 60, getUpBorder() - 4);
 
         label.add(saveButton);
-        saveButton.setBounds(570, 5, 120, getUpBorder() - 4);
+        saveButton.setBounds(630, 5, 120, getUpBorder() - 4);
 
         label.add(returnButton);
-        returnButton.setBounds(700, 5, 100, getUpBorder() - 4);
+        returnButton.setBounds(760, 5, 100, getUpBorder() - 4);
     }
 }

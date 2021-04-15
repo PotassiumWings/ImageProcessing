@@ -1,5 +1,7 @@
 package main.fft;
 
+import org.junit.Assert;
+
 public class FFT {
     private static final double PI = Math.acos(-1);
     private int limit;
@@ -11,7 +13,7 @@ public class FFT {
         while (limit < n) {
             limit <<= 1;
         }
-        assert (limit == n);
+        Assert.assertEquals(limit, n);
 
         rev = new int[limit];
         for (int i = 0; i < limit; i++) {
@@ -21,6 +23,7 @@ public class FFT {
 
     public Complex[] discreteFourierTransform(Complex[] input, int sign) {
         int i, j, k;
+        Assert.assertEquals (input.length, limit);
         Complex[] array = new Complex[limit];
         for (i = 0; i < limit; i++) {
             if (i < input.length) {

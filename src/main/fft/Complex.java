@@ -1,6 +1,8 @@
 package main.fft;
 
 public class Complex {
+    public static final Complex ZERO = new Complex(0, 0);
+
     public double x;
     public double y;
 

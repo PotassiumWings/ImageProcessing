@@ -1,9 +1,6 @@
 package main.fft;
 
 import main.Transform;
-import main.utils.AutoAdjustIcon;
-
-import javax.swing.JLabel;
 import java.awt.image.BufferedImage;
 
 public abstract class TransformWithFFT extends Transform {
@@ -23,6 +20,10 @@ public abstract class TransformWithFFT extends Transform {
 
     private double radius = 0.2;
 
+    private int offsetX = 0;
+    private int offsetY = 0;
+    private int gaussianLength = 3;
+
     private FFT2D fft2D;
 
     private boolean getMiddle = false;
@@ -33,6 +34,7 @@ public abstract class TransformWithFFT extends Transform {
         this.imageWidth = image.getWidth();
         this.imageHeight = image.getHeight();
         this.imageType = image.getType();
+        fft2D = new FFT2D(image.getWidth(), image.getHeight());
         rawPixels = new int[3][imageHeight * imageWidth];
         rawComplex = new Complex[3][];
     }
@@ -40,7 +42,6 @@ public abstract class TransformWithFFT extends Transform {
     public void calculate() {
         // raw image
         getRawPixels();
-        fft2D = new FFT2D(image.getWidth(), image.getHeight());
         paddingHeight = fft2D.getPaddingHeight();
         paddingWidth = fft2D.getPaddingWidth();
         for (int i = 0; i < 3; i++) {
@@ -65,11 +66,28 @@ public abstract class TransformWithFFT extends Transform {
         this.radius = radius;
     }
 
+    public void setGaussianLength(int length) {
+        this.gaussianLength = length;
+    }
+
     public void recalculate() {
+        offsetX = offsetY = 0;
         calcTransformedImage(
                 FFTShift.shift(rawComplex, paddingWidth, paddingHeight),
                 paddingWidth, paddingHeight, radius, getMiddle
         );
+    }
+
+    public void gaussianFilter() {
+        offsetX = offsetY = gaussianLength;
+        gaussianFilter(fft2D, FFTShift.shift(rawComplex, paddingWidth, paddingHeight),
+                paddingWidth, paddingHeight, radius, offsetX);
+    }
+
+    public void waveFilter() {
+        offsetX = offsetY = 0;
+        waveFilter(FFTShift.shift(rawComplex, paddingWidth, paddingHeight),
+                paddingWidth, paddingHeight, radius);
     }
 
     public void updateTransformedComplex(Complex[][] complex) {
@@ -87,7 +105,8 @@ public abstract class TransformWithFFT extends Transform {
             Complex[] complexes = fft2D.getInverse(shiftedComplex[i]);
             for (int j = 0; j < imageHeight; j++) {
                 for (int k = 0; k < imageWidth; k++) {
-                    adjustComplex[i][j * imageWidth + k] = complexes[j * paddingWidth + k];
+                    adjustComplex[i][j * imageWidth + k] =
+                            complexes[(j + offsetX) * paddingWidth + k + offsetY];
                 }
             }
         }
@@ -107,6 +126,10 @@ public abstract class TransformWithFFT extends Transform {
 
     public abstract void calcTransformedImage(Complex[][] pixels,
                                               int width, int height, double radius, boolean getMiddle);
+
+    public abstract void gaussianFilter(FFT2D fft2D, Complex[][] pixels, int width, int height, double radius, int len);
+
+    public abstract void waveFilter(Complex[][] pixels, int width, int height, double radius);
 
     private void getRawPixels() {
         int[] pixels = new int[imageWidth * imageHeight];

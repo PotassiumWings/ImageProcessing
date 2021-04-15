@@ -16,6 +16,9 @@ public class FFTUtils {
                     max = pixel;
                 }
             }
+            if (max <= 1) {
+                max = 255;
+            }
             for (int i = 0; i < complexes[channel].length; i++) {
                 int pixel;
                 if (useLog) {

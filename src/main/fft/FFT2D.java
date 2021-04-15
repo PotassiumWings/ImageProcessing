@@ -1,5 +1,7 @@
 package main.fft;
 
+import org.junit.Assert;
+
 public class FFT2D {
     private Complex[] destination;
     private Complex[] inverse;
@@ -16,9 +18,10 @@ public class FFT2D {
         this.originWidth = width;
         this.originHeight = height;
         this.width = adjust(width);
+
         this.height = adjust(height);
-        fftW = new FFT(width);
-        fftH = new FFT(height);
+        fftW = new FFT(this.width);
+        fftH = new FFT(this.height);
     }
 
     public int getPaddingWidth() {
@@ -29,13 +32,13 @@ public class FFT2D {
         return height;
     }
 
-    private void constructFFT(double[] pixels) {
+    private void constructFFT(Complex[] pixels) {
         // fft at width
         Complex[] agent = new Complex[width * height];
         for (int i = 0; i < height; i++) {
             Complex[] array = new Complex[width];
             for (int j = 0; j < width; j++) {
-                array[j] = new Complex(pixels[i * width + j], 0);
+                array[j] = pixels[i * width + j];
             }
             Complex[] result = fftW.discreteFourierTransform(array, 1);
             for (int j = 0; j < width; j++) {
@@ -84,8 +87,20 @@ public class FFT2D {
     }
 
     public Complex[] getDFT(int[] pixels) {
-        assert (pixels.length == width * height);
+        Assert.assertEquals (pixels.length, originWidth * originHeight);
         constructFFT(getPaddingArray(pixels));
+        return destination;
+    }
+
+    public Complex[] getDFT(double[] pixels) {
+        Assert.assertEquals (pixels.length, originWidth * originHeight);
+        constructFFT(getPaddingArray(pixels));
+        return destination;
+    }
+
+    public Complex[] getDFT(Complex[] pixels) {
+        Assert.assertEquals (pixels.length, width * height);
+        constructFFT(pixels);
         return destination;
     }
 
@@ -96,20 +111,29 @@ public class FFT2D {
 
     private int adjust(int input) {
         int limit = 1;
-        while (limit < input) {
+        // limit set to >= input + 50 to support kernel convolution
+        while (limit < input + 50) {
             limit <<= 1;
         }
         return limit;
     }
 
-    private double[] getPaddingArray(int[] pixels) {
-        double[] res = new double[width * height];
+    private Complex[] getPaddingArray(int[] pixels) {
+        double[] dbPixels = new double[pixels.length];
+        for (int i = 0; i < pixels.length; i++) {
+            dbPixels[i] = pixels[i];
+        }
+        return getPaddingArray(dbPixels);
+    }
+
+    private Complex[] getPaddingArray(double[] pixels) {
+        Complex[] res = new Complex[width * height];
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 if (i < originHeight && j < originWidth) {
-                    res[i * width + j] = pixels[i * originWidth + j];
+                    res[i * width + j] = new Complex(pixels[i * originWidth + j], 0);
                 } else {
-                    res[i * width + j] = 0;
+                    res[i * width + j] = Complex.ZERO;
                 }
             }
         }
