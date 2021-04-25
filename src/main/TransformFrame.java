@@ -102,7 +102,7 @@ public abstract class TransformFrame extends JFrame {
         labels[1] = transform.getTransformedImagePanel(this);
         labels[2] = transform.getOriginExpressionPanel(this);
         labels[3] = transform.getTransformedExpressionPanel(this);
-        System.err.println("frame width: " + getWidth() + ", height: " + getHeight());
+        // System.err.println("frame width: " + getWidth() + ", height: " + getHeight());
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 2; j++) {
                 int layerWidth = getWidth() - BORDER * 2;

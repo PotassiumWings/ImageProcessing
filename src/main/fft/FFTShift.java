@@ -2,7 +2,10 @@ package main.fft;
 
 public class FFTShift {
 
-    public static Complex[][] shift(Complex[][] complexes, int w, int h) {
+    public static Complex[][] shift(Complex[][] complexes, int w, int h, boolean shouldShift) {
+        if (!shouldShift) {
+            return complexes;
+        }
         Complex[][] shift = new Complex[3][w * h];
         for (int c = 0; c < 3; c++) {
             for (int i = 0; i < h; i++) {

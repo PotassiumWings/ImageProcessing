@@ -17,7 +17,7 @@ public class FFT2DTest {
                 pixels[i * w + j] = (i < 8) ? 255 : 0;
             }
         }
-        FFT2D FFT2D = new FFT2D(w, h);
+        FFT2D FFT2D = new FFT2D(w, h, true);
         for (int i = 0; i < h; i++) {
             for (int j = 0; j < w; j++) {
                 System.out.print(pixels[i * w + j] + "\t");

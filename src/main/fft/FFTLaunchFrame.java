@@ -145,7 +145,7 @@ public class FFTLaunchFrame extends TransformFrame {
             }
         });
 
-        saveButton = new Button("Save Image");
+        saveButton = new Button("Save");
         saveButton.setFont(FrameSettings.getButtonFont());
         saveButton.addActionListener(e -> {
             try {
@@ -171,25 +171,25 @@ public class FFTLaunchFrame extends TransformFrame {
         textField.setBounds(100, 7, 50, getUpBorder() - 8);
 
         label.add(reverseButton);
-        reverseButton.setBounds(155, 5, 40, getUpBorder() - 4);
+        reverseButton.setBounds(215, 5, 40, getUpBorder() - 4);
 
         label.add(gaussianButton);
-        gaussianButton.setBounds(200, 5, 70, getUpBorder() - 4);
+        gaussianButton.setBounds(260, 5, 70, getUpBorder() - 4);
 
         label.add(waveButton);
-        waveButton.setBounds(275, 5, 70, getUpBorder() - 4);
+        waveButton.setBounds(335, 5, 70, getUpBorder() - 4);
 
         label.add(actButton);
-        actButton.setBounds(350, 5, 140, getUpBorder() - 4);
+        actButton.setBounds(410, 5, 140, getUpBorder() - 4);
 
         label.add(saveFFT1Button);
-        saveFFT1Button.setBounds(490, 5, 60, getUpBorder() - 4);
+        saveFFT1Button.setBounds(555, 5, 60, getUpBorder() - 4);
 
         label.add(saveFFT2Button);
-        saveFFT2Button.setBounds(560, 5, 60, getUpBorder() - 4);
+        saveFFT2Button.setBounds(620, 5, 60, getUpBorder() - 4);
 
         label.add(saveButton);
-        saveButton.setBounds(630, 5, 120, getUpBorder() - 4);
+        saveButton.setBounds(685, 5, 70, getUpBorder() - 4);
 
         label.add(returnButton);
         returnButton.setBounds(760, 5, 100, getUpBorder() - 4);

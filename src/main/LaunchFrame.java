@@ -30,8 +30,10 @@ public class LaunchFrame extends JFrame {
     private Button chooseFileButton;
     private Button transformButton;
     private Button fftButton;
+    private Button dctButton;
 
     private FourierTransform fourierTransform;
+    private FourierTransform cosTransform;
 
     private int imageHeight;
     private int imageWidth;
@@ -77,20 +79,33 @@ public class LaunchFrame extends JFrame {
             }
         });
 
-        transformButton = new Button("Transform without FFT");
+        transformButton = new Button("Pixel");
         transformButton.setFont(FrameSettings.getButtonFont());
         transformButton.addActionListener(e -> {
             new TransformLaunchFrame(this, image, imageWidth, imageHeight);
             this.setVisible(false);
         });
 
-        fftButton = new Button("Transform with FFT");
+        fftButton = new Button("DFT");
         fftButton.setFont(FrameSettings.getButtonFont());
         fftButton.addActionListener(e -> {
-            fourierTransform = new FourierTransform(image);
+            long time = System.currentTimeMillis();
+            fourierTransform = new FourierTransform(image, true);
             fourierTransform.calculate();
             new FFTLaunchFrame(this, fourierTransform);
             this.setVisible(false);
+            System.err.println("DFT time consumed: " + (System.currentTimeMillis() - time));
+        });
+
+        dctButton = new Button("DCT");
+        dctButton.setFont(FrameSettings.getButtonFont());
+        dctButton.addActionListener(e -> {
+            long time = System.currentTimeMillis();
+            cosTransform = new FourierTransform(image, false);
+            cosTransform.calculate();
+            new FFTLaunchFrame(this, cosTransform);
+            this.setVisible(false);
+            System.err.println("DCT time consumed: " + (System.currentTimeMillis() - time));
         });
     }
 
@@ -121,5 +136,6 @@ public class LaunchFrame extends JFrame {
         panel.add(chooseFileButton);
         panel.add(transformButton);
         panel.add(fftButton);
+        panel.add(dctButton);
     }
 }

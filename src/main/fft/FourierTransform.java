@@ -7,24 +7,25 @@ import java.awt.image.BufferedImage;
 public class FourierTransform extends TransformWithFFT {
     public static final double PI = Math.acos(-1);
 
-    public FourierTransform(BufferedImage image) {
-        super(image);
+    public FourierTransform(BufferedImage image, boolean isDFT) {
+        super(image, isDFT);
     }
 
     @Override
-    public void calcTransformedImage(Complex[][] pixels,
-                                     int width, int height, double radius, boolean getMiddle) {
+    public void calcDFTTransformedImage(Complex[][] pixels,
+                                        int width, int height, double radius,
+                                        boolean getMiddle, boolean isDFT) {
         Complex[][] res = new Complex[pixels.length][pixels[0].length];
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < pixels[i].length; j++) {
-                if (inRadiusOf(j, width, height, radius, getMiddle)) {
+                if (!isDFT || inRadiusOf(j, width, height, radius, getMiddle)) {
                     res[i][j] = pixels[i][j];
                 } else {
                     res[i][j] = new Complex(0, 0);
                 }
             }
         }
-        updateTransformedComplex(res);
+        updateTransformedComplex(res, true);
     }
 
     private boolean inRadiusOf(int i, int width, int height, double radius, boolean getMiddle) {
@@ -64,8 +65,8 @@ public class FourierTransform extends TransformWithFFT {
                 res[i][j] = gaussian[j].multiply(pixels[i][j]);
             }
         }
-        res = FFTShift.shift(res, paddingWidth, paddingHeight);
-        updateTransformedComplex(res);
+        res = FFTShift.shift(res, paddingWidth, paddingHeight, true);
+        updateTransformedComplex(res, true);
     }
 
     public void waveFilter(Complex[][] pixels, int width, int height, double radius) {
@@ -102,6 +103,6 @@ public class FourierTransform extends TransformWithFFT {
                 }
             }
         }
-        updateTransformedComplex(res);
+        updateTransformedComplex(res, true);
     }
 }
