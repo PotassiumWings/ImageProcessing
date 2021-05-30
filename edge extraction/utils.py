@@ -13,7 +13,7 @@ def output_image(image, path="output.jpg"):
     cv2.imwrite("images/" + path, image)
 
 
-def dot(image, g):
+def conv(image, g):
     # result = cv2.filter2D(image, -1, g, anchor=(0, 0))
     (w, h) = (len(image), len(image[0]))
     (gw, gh) = (len(g), len(g[0]))

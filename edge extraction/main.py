@@ -36,7 +36,7 @@ if __name__ == "__main__":
     roberts_img, roberts_path = roberts(image)
     sobel_img, sobel_path = sobel(image)
     scharr_img, scharr_path = scharr(image)
-    laplace_img, laplace_path = laplace(image)
+    laplace_img, laplace_path, add_laplace_img = laplace(image)
     laplace8_img, laplace8_path = laplace_8(image)
     canny_img, canny_path = canny(image)
 
@@ -47,10 +47,43 @@ if __name__ == "__main__":
     output_image(scharr_img, scharr_path)
     output_image(scharrcv2_img, scharrcv2_path)
     output_image(laplace_img, laplace_path)
+    output_image(add_laplace_img, "add_" + laplace_path)
     output_image(laplacecv2_img, laplacecv2_path)
     output_image(laplace8_img, laplace8_path)
     output_image(cannycv2_img, cannycv2_path)
     output_image(canny_img, canny_path)
+
+    titles = ['Source Image', '', 'Sobel cv2', 'Scharr cv2',
+              'Roberts', 'Prewitt', 'Sobel', 'Scharr']
+    images = [image, '', sobelcv2_img, scharrcv2_img,
+              roberts_img, prewitt_img, sobel_img, scharr_img]
+    for i in range(8):
+        if titles[i] == '':
+            continue
+        plt.subplot(2, 4, i + 1), plt.imshow(images[i], 'gray')
+        plt.title(titles[i], y=-0.24)
+        plt.xticks([]), plt.yticks([])
+    plt.savefig("part1-fig.png", dpi=600)
+    plt.show()
+
+    titles = ['', '', '']
+    images = [image, laplace_img, add_laplace_img]
+    for i in range(3):
+        plt.subplot(1, 3, i + 1), plt.imshow(images[i], 'gray')
+        plt.xticks([]), plt.yticks([])
+    plt.savefig("part2-fig.png", dpi=600)
+    plt.show()
+
+    canny_imgs = [None for _ in range(10)]
+    for i in range(1, 7):
+        high = i * 30
+        low = i * 10
+        canny_imgs[i], canny_path = canny(image, high, low)
+        output_image(canny_imgs[i], str(i) + "_" + canny_path)
+        plt.subplot(2, 3, i), plt.imshow(canny_imgs[i], 'gray')
+        plt.xticks([]), plt.yticks([])
+    plt.savefig("part3-fig.png", dpi=600)
+    plt.show()
 
     titles = ['Source Image', 'Prewitt', 'Roberts', '',
               'Sobel', 'Scharr', 'Laplace', 'Canny',

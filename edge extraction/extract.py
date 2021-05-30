@@ -1,5 +1,5 @@
 import numpy as np
-from utils import dot, np_value_range, normalize, show, save
+from utils import conv, np_value_range, normalize, show, save
 
 
 def roberts(image):
@@ -7,8 +7,8 @@ def roberts(image):
                    [0, -1]])
     gy = np.array([[0, 1],
                    [-1, 0]])
-    hx = dot(image, gx)
-    hy = dot(image, gy)
+    hx = conv(image, gx)
+    hy = conv(image, gy)
     h = np.abs(hx) + np.abs(hy)
     h = np_value_range(h)
     h = normalize(h)
@@ -26,8 +26,8 @@ def prewitt(image):
     gy = np.array([[-1, 0, 1],
                    [-1, 0, 1],
                    [-1, 0, 1]])
-    hx = dot(image, gx)
-    hy = dot(image, gy)
+    hx = conv(image, gx)
+    hy = conv(image, gy)
     h = np.sqrt(np.power(hx, 2.0) + np.power(hy, 2.0))
     h = np_value_range(h)
     h = normalize(h)
@@ -45,8 +45,8 @@ def sobel(image):
     gy = np.array([[-1, 0, 1],
                    [-2, 0, 2],
                    [-1, 0, 1]])
-    hx = dot(image, gx)
-    hy = dot(image, gy)
+    hx = conv(image, gx)
+    hy = conv(image, gy)
     h = np.sqrt(np.power(hx, 2.0) + np.power(hy, 2.0))
     h = np_value_range(h)
     h = normalize(h)
@@ -64,8 +64,8 @@ def scharr(image):
     gy = np.array([[-3, 0, 3],
                    [-10, 0, 10],
                    [-3, 0, 3]])
-    hx = dot(image, gx)
-    hy = dot(image, gy)
+    hx = conv(image, gx)
+    hy = conv(image, gy)
     h = np.sqrt(np.power(hx, 2.0) + np.power(hy, 2.0))
     h = np_value_range(h)
     h = normalize(h)
@@ -80,19 +80,20 @@ def laplace(image):
     g = np.array([[0, -1, 0],
                   [-1, 4, -1],
                   [0, -1, 0]])
-    h = dot(image, g)
+    h = conv(image, g)
+    add = h + image
     h = np_value_range(h)
     h = normalize(h)
     show(h, "h")
     save("laplace-fig")
-    return h, "laplace.jpg"
+    return h, "laplace.jpg", add
 
 
 def laplace_8(image):
     g = np.array([[0, -1, 0],
                   [-1, 4, -1],
                   [0, -1, 0]])
-    h = dot(image, g)
+    h = conv(image, g)
     h = np_value_range(h)
     h = normalize(h)
     show(h, "h")
@@ -100,35 +101,39 @@ def laplace_8(image):
     return h, "laplace8.jpg"
 
 
-def canny(image):
+def canny(image, high_thres=90, low_thres=30):
+    show(image, "origin")
     height = len(image)
     width = len(image[0])
 
+    # gauss filter
     gauss = np.zeros((5, 5))
     for i in range(5):
         for j in range(5):
             x = i - 2
             y = j - 2
             sigma = 1
-            gauss[i][j] = np.exp(-(x * x + y * y) / (2 * sigma * sigma)) / (2 * np.arccos(-1) * sigma * sigma)
-
-    show(image, "origin")
-    image = dot(image, gauss)
+            gauss[i][j] = np.exp(-(x * x + y * y) /
+                                 (2 * sigma * sigma)) / \
+                          (2 * np.arccos(-1) * sigma * sigma)
+    image = conv(image, gauss)
     show(image, "after gauss")
 
+    # Sobel operator
     gx = np.array([[-1, -2, -1],
                    [0, 0, 0],
                    [1, 2, 1]])
     gy = np.array([[-1, 0, 1],
                    [-2, 0, 2],
                    [-1, 0, 1]])
-    hx = dot(image, gx)
-    hy = dot(image, gy)
+    hx = conv(image, gx)
+    hy = conv(image, gy)
     h = np.sqrt(np.power(hx, 2.0) + np.power(hy, 2.0))
     h = np_value_range(h)
     h = normalize(h)
     show(h, "calc gradient")
 
+    # maximum filter
     res = np.zeros((height, width))
     for i in range(1, height - 1):
         for j in range(1, width - 1):
@@ -171,9 +176,8 @@ def canny(image):
                 res[i][j] = 0
     show(res, "filter")
 
+    # 2-threshold filter
     final = np.zeros((height, width))
-    high_thres = 90
-    low_thres = 30
     for i in range(height):
         for j in range(width):
             if res[i][j] >= high_thres:
